@@ -1,6 +1,6 @@
 package com.intuitcraft.onboarding.service;
 
-import com.intuitcraft.onboarding.model.Driver;
+import com.intuitcraft.onboarding.dto.Driver;
 import com.intuitcraft.onboarding.model.PublicCredentials;
 import com.intuitcraft.onboarding.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;

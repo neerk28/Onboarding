@@ -1,4 +1,4 @@
-package com.intuitcraft.onboarding.model;
+package com.intuitcraft.onboarding.dto;
 
 import lombok.Getter;
 import lombok.Setter;

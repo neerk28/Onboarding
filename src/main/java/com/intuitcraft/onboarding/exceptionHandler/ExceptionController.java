@@ -50,4 +50,13 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IdentityException.class)
+    public ResponseEntity<Object> handleIdentityException(IdentityException e, WebRequest request){
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", e.getMessage());
+        body.put("code", e.getCode());
+        return new ResponseEntity<>(body, e.getStatus());
+    }
+
 }

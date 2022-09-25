@@ -1,11 +1,11 @@
-package com.intuitcraft.onboarding.model;
+package com.intuitcraft.onboarding.dto;
 
+import com.intuitcraft.onboarding.dto.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 
 @Entity
 @Table(name = "driver")
