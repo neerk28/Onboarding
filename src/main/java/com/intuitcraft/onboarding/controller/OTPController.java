@@ -1,8 +1,7 @@
 package com.intuitcraft.onboarding.controller;
 
-import com.intuitcraft.onboarding.dto.Driver;
+import com.intuitcraft.onboarding.entity.Driver;
 import com.intuitcraft.onboarding.model.SendOtpRequest;
-import com.intuitcraft.onboarding.model.SendOtpRequestModel;
 import com.intuitcraft.onboarding.model.SendOtpResponse;
 import com.intuitcraft.onboarding.model.ValidateOtpRequest;
 import com.intuitcraft.onboarding.service.OTPService;
@@ -24,7 +23,7 @@ public class OTPController {
     OTPService otpService;
 
     @PostMapping("/send")
-    public ResponseEntity<SendOtpResponse> sendLoginOtp(@Valid @RequestBody SendOtpRequest sendOtpRequest){
+    public ResponseEntity<SendOtpResponse> sendLoginOtp(@RequestBody SendOtpRequest sendOtpRequest){
         SendOtpResponse sendOtpResponse = otpService.sendOtp(sendOtpRequest);
         return new ResponseEntity<>(sendOtpResponse, HttpStatus.OK);
     }

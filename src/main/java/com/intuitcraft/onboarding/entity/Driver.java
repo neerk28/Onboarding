@@ -1,6 +1,5 @@
-package com.intuitcraft.onboarding.dto;
+package com.intuitcraft.onboarding.entity;
 
-import com.intuitcraft.onboarding.dto.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,4 +16,7 @@ public class Driver extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+//    @OneToMany(mappedBy = "driver")
+//    private Set<DriverPrefAndConsent> prefsAndConsents = new HashSet<>();
 }

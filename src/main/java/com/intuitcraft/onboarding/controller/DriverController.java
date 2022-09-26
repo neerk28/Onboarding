@@ -1,6 +1,7 @@
 package com.intuitcraft.onboarding.controller;
 
-import com.intuitcraft.onboarding.dto.Driver;
+import com.intuitcraft.onboarding.entity.Driver;
+import com.intuitcraft.onboarding.model.PrefAndConsent;
 import com.intuitcraft.onboarding.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,5 +27,11 @@ public class DriverController {
     public ResponseEntity<Driver> getDriverById(@PathVariable Long id){
         Driver newDriver = driverService.getDriverById(id);
         return new ResponseEntity<>(newDriver, HttpStatus.OK);
+    }
+
+    @PostMapping("/driverPrefAndConsent")
+    public ResponseEntity<Void> saveDriversPrefAndConsent(@Valid @RequestBody PrefAndConsent prefAndConsent){
+        driverService.savePrefAndConsent(prefAndConsent);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

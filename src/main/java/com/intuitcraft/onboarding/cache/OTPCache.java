@@ -36,8 +36,10 @@ public class OTPCache {
         return 0;
     }
 
-    private String getKey(String otpToken) {
-        return SERVICE_NAME + Base64.getEncoder().encodeToString(otpToken.getBytes());
+    public String getKey(String otpToken) {
+        System.out.println(otpToken);
+        System.out.println(Base64.getEncoder().encodeToString((SERVICE_NAME + otpToken).getBytes()));
+        return Base64.getEncoder().encodeToString((SERVICE_NAME + otpToken).getBytes());
     }
 
     public void cacheData(String key, Object value, Duration duration) {
@@ -51,7 +53,7 @@ public class OTPCache {
     }
 
     public <T> T getData(String otpToken, Class<T> valueType) {
-        String cacheKey = getKey(otpToken);
+        String cacheKey = otpToken;
         try {
             Object value = redisTemplate.opsForValue().get(cacheKey);
             if (value != null) {

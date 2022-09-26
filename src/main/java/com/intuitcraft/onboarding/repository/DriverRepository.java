@@ -1,6 +1,6 @@
 package com.intuitcraft.onboarding.repository;
 
-import com.intuitcraft.onboarding.dto.Driver;
+import com.intuitcraft.onboarding.entity.Driver;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

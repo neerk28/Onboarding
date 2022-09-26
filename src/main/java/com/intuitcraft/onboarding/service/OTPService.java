@@ -41,7 +41,7 @@ public class OTPService {
                         .intent(intent).build();
                 String otpToken = getOtpKey(email, phoneNumber) + KEY_SEPARATOR + intent + new Timestamp(System.currentTimeMillis());
                 cache.cacheData(otpToken, otpTokenModel, Duration.ofMinutes(ttl));
-                response = SendOtpResponse.builder().otpToken(otpToken).build();
+                response = SendOtpResponse.builder().otpToken(cache.getKey(otpToken)).build();
             }
         }else {
             throw new IdentityException("USER_BLOCKED", "User blocked for " + ttl + " minutes", HttpStatus.UNAUTHORIZED);
@@ -64,16 +64,17 @@ public class OTPService {
         if( otpCount < maxIncorrectOtpCount){
             otpToken.setIncorrectOtpCount(otpCount);
             //verifyOtp - another microservice which sends otp to user's email or phoneNumber
-            if(true){
+            if(validateOtpRequest.getOtp().equals("123456")){
                 otpToken.setOtp(validateOtpRequest.getOtp());
                 otpToken.setOtpVerified(true);
                 cache.clearCache(otpCountKey);
                 cache.cacheData(validateOtpRequest.getOtpToken(), otpToken, Duration.ofMinutes(ttl));
                 return true;
+            }else {
+                throw new IdentityException("INCORRECT_OTP", "Attempt Remaining : " + (maxIncorrectOtpCount - otpToken.getIncorrectOtpCount()), HttpStatus.BAD_REQUEST);
             }
         }else {
             throw new IdentityException("USER_BLOCKED", "User blocked for " + ttl + " minutes", HttpStatus.UNAUTHORIZED);
         }
-        return false;
     }
 }

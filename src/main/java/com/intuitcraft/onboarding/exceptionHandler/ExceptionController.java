@@ -8,6 +8,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
@@ -25,9 +27,9 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
             headers, HttpStatus status, WebRequest request) {
         Map<String, String> errors = new HashMap<>();
         e.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
+            errors.put("message", errorMessage);
+            errors.put("timestamp", String.valueOf(LocalDateTime.now()));
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
@@ -57,6 +59,22 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         body.put("message", e.getMessage());
         body.put("code", e.getCode());
         return new ResponseEntity<>(body, e.getStatus());
+    }
+
+    @ExceptionHandler({MaxUploadSizeExceededException.class, MultipartException.class})
+    public ResponseEntity<Object> handleUploadException(Exception e, WebRequest request){
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", e.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleGenericException(RuntimeException e, WebRequest request){
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", e.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

@@ -1,9 +1,8 @@
-package com.intuitcraft.onboarding.dto;
+package com.intuitcraft.onboarding.entity;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Email;
@@ -14,7 +13,6 @@ import javax.validation.constraints.Size;
 @Setter
 @MappedSuperclass
 @ToString
-@Validated
 public class User {
 
     @NotBlank
