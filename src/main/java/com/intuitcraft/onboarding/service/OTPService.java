@@ -1,8 +1,11 @@
 package com.intuitcraft.onboarding.service;
 
 import com.intuitcraft.onboarding.cache.OTPCache;
+import com.intuitcraft.onboarding.dto.enums.Intent;
 import com.intuitcraft.onboarding.exceptionHandler.IdentityException;
-import com.intuitcraft.onboarding.model.*;
+import com.intuitcraft.onboarding.dto.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,8 @@ public class OTPService {
 
     @Autowired
     OTPCache cache;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OTPService.class);
     public SendOtpResponse sendOtp(SendOtpRequest sendOtpRequest) {
         SendOtpResponse response = null;
         Intent intent = sendOtpRequest.getIntent();
@@ -42,8 +47,10 @@ public class OTPService {
                 String otpToken = getOtpKey(email, phoneNumber) + KEY_SEPARATOR + intent + new Timestamp(System.currentTimeMillis());
                 cache.cacheData(otpToken, otpTokenModel, Duration.ofMinutes(ttl));
                 response = SendOtpResponse.builder().otpToken(cache.getKey(otpToken)).build();
+                LOGGER.info("OTP token generated for {}" , getOtpKey(email,phoneNumber));
             }
         }else {
+            LOGGER.error("User blocked for {} minutes" , ttl);
             throw new IdentityException("USER_BLOCKED", "User blocked for " + ttl + " minutes", HttpStatus.UNAUTHORIZED);
         }
         return response;
@@ -57,6 +64,7 @@ public class OTPService {
 
         OtpToken otpToken = cache.getData(validateOtpRequest.getOtpToken(), OtpToken.class);
         if(otpToken == null){
+            LOGGER.error("Incorrect otp token passed");
             throw new IdentityException("INVALID_TOKEN"," Incorrect otp token", HttpStatus.BAD_REQUEST);
         }
         String otpCountKey = otpToken.getIntent() + getOtpKey(otpToken.getEmail(), otpToken.getPhoneNumber());
@@ -69,11 +77,14 @@ public class OTPService {
                 otpToken.setOtpVerified(true);
                 cache.clearCache(otpCountKey);
                 cache.cacheData(validateOtpRequest.getOtpToken(), otpToken, Duration.ofMinutes(ttl));
+                LOGGER.info("OTP token and OTP verified for {}" , getOtpKey(otpToken.getEmail(), otpToken.getPhoneNumber()));
                 return true;
             }else {
+                LOGGER.error("Incorrect otp passed - remaining attempt {}" ,(maxIncorrectOtpCount - otpToken.getIncorrectOtpCount()));
                 throw new IdentityException("INCORRECT_OTP", "Attempt Remaining : " + (maxIncorrectOtpCount - otpToken.getIncorrectOtpCount()), HttpStatus.BAD_REQUEST);
             }
         }else {
+            LOGGER.error("Incorrect attempts exhausted for {}" , otpCountKey);
             throw new IdentityException("USER_BLOCKED", "User blocked for " + ttl + " minutes", HttpStatus.UNAUTHORIZED);
         }
     }

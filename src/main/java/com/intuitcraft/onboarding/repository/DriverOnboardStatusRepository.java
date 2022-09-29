@@ -1,14 +1,13 @@
 package com.intuitcraft.onboarding.repository;
 
-import com.intuitcraft.onboarding.entity.DriverOnboardStatus;
-import com.intuitcraft.onboarding.entity.FileId;
+import com.intuitcraft.onboarding.dto.enums.FileType;
+import com.intuitcraft.onboarding.entity.DriverOnboardStatusEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface DriverOnboardStatusRepository extends JpaRepository<DriverOnboardStatus, FileId> {
+public interface DriverOnboardStatusRepository extends JpaRepository<DriverOnboardStatusEntity, Long> {
 
-    DriverOnboardStatus findByFileId(FileId fileId);
-
-    List<DriverOnboardStatus> findAllByFileIdId(Long id);
+    List<DriverOnboardStatusEntity> findByDriverId(Long id);
+    DriverOnboardStatusEntity findByDriverIdAndFileType(Long id, FileType fileType);
 }

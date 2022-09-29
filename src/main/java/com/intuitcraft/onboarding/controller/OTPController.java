@@ -1,9 +1,9 @@
 package com.intuitcraft.onboarding.controller;
 
-import com.intuitcraft.onboarding.entity.Driver;
-import com.intuitcraft.onboarding.model.SendOtpRequest;
-import com.intuitcraft.onboarding.model.SendOtpResponse;
-import com.intuitcraft.onboarding.model.ValidateOtpRequest;
+import com.intuitcraft.onboarding.entity.DriverEntity;
+import com.intuitcraft.onboarding.dto.SendOtpRequest;
+import com.intuitcraft.onboarding.dto.SendOtpResponse;
+import com.intuitcraft.onboarding.dto.ValidateOtpRequest;
 import com.intuitcraft.onboarding.service.OTPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("v1/identity/otp")
+@RequestMapping("/otp")
 public class OTPController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class OTPController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Driver> verifyOtp(@Valid @RequestBody ValidateOtpRequest validateOtpRequest){
+    public ResponseEntity<DriverEntity> verifyOtp(@Valid @RequestBody ValidateOtpRequest validateOtpRequest){
         boolean isValid = otpService.verifyOtp(validateOtpRequest);
         if(isValid)
             return new ResponseEntity<>(HttpStatus.OK);

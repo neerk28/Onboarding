@@ -37,8 +37,6 @@ public class OTPCache {
     }
 
     public String getKey(String otpToken) {
-        System.out.println(otpToken);
-        System.out.println(Base64.getEncoder().encodeToString((SERVICE_NAME + otpToken).getBytes()));
         return Base64.getEncoder().encodeToString((SERVICE_NAME + otpToken).getBytes());
     }
 
@@ -57,6 +55,7 @@ public class OTPCache {
         try {
             Object value = redisTemplate.opsForValue().get(cacheKey);
             if (value != null) {
+                LOGGER.info("Getting data from cache for {}",cacheKey);
                 return mapper.readValue((String) value, valueType);
             }
             return null;
@@ -81,5 +80,6 @@ public class OTPCache {
     public void clearCache(String otpCountKey) {
         String cacheKey = getKey(otpCountKey);
         redisTemplate.opsForValue().getAndDelete(cacheKey);
+        LOGGER.info("User otp validated, cache cleared");
     }
 }

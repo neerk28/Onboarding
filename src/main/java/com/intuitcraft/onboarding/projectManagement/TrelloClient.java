@@ -1,7 +1,7 @@
 package com.intuitcraft.onboarding.projectManagement;
 
-import com.intuitcraft.onboarding.model.FileMeta;
-import com.intuitcraft.onboarding.model.FileType;
+import com.intuitcraft.onboarding.dto.FileMeta;
+import com.intuitcraft.onboarding.dto.enums.FileType;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
@@ -11,10 +11,11 @@ import java.util.Map;
 
 public class TrelloClient {
 
+
     static Map<FileType, String> listMap = new HashMap<>();
     static{
         listMap.put(FileType.PAN,"63318574a9e886013ba826c2");
-        listMap.put(FileType.PROFILE_PHOTO,"633172fe789e26054e452251");
+        listMap.put(FileType.PP,"633172fe789e26054e452251");
         listMap.put(FileType.DL,"6331867e1523f103c8dcfda6");
         listMap.put(FileType.RC,"63318690715e7e0332f019dc");
     }
