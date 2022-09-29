@@ -109,30 +109,32 @@ public class DriverProfileService {
         LOGGER.info("Driver Consents {} saved successfully", driverConsent.getDriverId());
     }
 
-    public void saveCommunicationPreferences(Long id, List<DriverPreference> driverPreferences) {
-        getDriverById(id);
-        for(DriverPreference driverPreference : driverPreferences){
+    public void saveCommunicationPreferences(DriverPreference driverPreferences) {
+        getDriverById(driverPreferences.getDriverId());
+        for(Preference driverPreference : driverPreferences.getPreferences()){
             DriverCommunicationPreferenceEntity entity = new DriverCommunicationPreferenceEntity();
             entity.setPreferenceType(driverPreference.getPreferenceType());
             entity.setAllowed(driverPreference.isAllowed());
-            entity.setDriverId(id);
+            entity.setDriverId(driverPreferences.getDriverId());
             driverCommunicationPreferencesRepository.save(entity);
         }
-        LOGGER.info("Driver Communication Preferences {} saved successfully", id);
+        LOGGER.info("Driver Communication Preferences {} saved successfully", driverPreferences.getDriverId());
 
     }
 
-    public List<DriverPreference> getCommunicationPreferencesForId(Long id) {
+    public DriverPreference getCommunicationPreferencesForId(Long id) {
         getDriverById(id);
         List<DriverCommunicationPreferenceEntity> entities = driverCommunicationPreferencesRepository.findByDriverId(id);
-        List<DriverPreference> driverPreferenceList = new ArrayList<>();
+        List<Preference> driverPreferenceList = new ArrayList<>();
+        DriverPreference driverPreference = new DriverPreference();
         for(DriverCommunicationPreferenceEntity entity : entities){
-            DriverPreference driverPreference = new DriverPreference();
-            driverPreference.setPreferenceType(entity.getPreferenceType());
-            driverPreference.setAllowed(entity.isAllowed());
-            driverPreferenceList.add(driverPreference);
+            Preference preference = new Preference();
+            preference.setPreferenceType(entity.getPreferenceType());
+            preference.setAllowed(entity.isAllowed());
+            driverPreferenceList.add(preference);
         }
-        return driverPreferenceList;
+        driverPreference.setPreferences(driverPreferenceList);
+        return driverPreference;
     }
 
     public List<StatusInfo> getOnboardApplicationStatus(Long id) {

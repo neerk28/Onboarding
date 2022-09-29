@@ -60,7 +60,7 @@ public class OTPService {
         return phoneNumber != null ? phoneNumber : email;
     }
 
-    public boolean verifyOtp(ValidateOtpRequest validateOtpRequest) {
+    public AccessToken verifyOtp(ValidateOtpRequest validateOtpRequest) {
 
         OtpToken otpToken = cache.getData(validateOtpRequest.getOtpToken(), OtpToken.class);
         if(otpToken == null){
@@ -78,7 +78,7 @@ public class OTPService {
                 cache.clearCache(otpCountKey);
                 cache.cacheData(validateOtpRequest.getOtpToken(), otpToken, Duration.ofMinutes(ttl));
                 LOGGER.info("OTP token and OTP verified for {}" , getOtpKey(otpToken.getEmail(), otpToken.getPhoneNumber()));
-                return true;
+                return new AccessToken("abcd1234efgh789tfdcty==");
             }else {
                 LOGGER.error("Incorrect otp passed - remaining attempt {}" ,(maxIncorrectOtpCount - otpToken.getIncorrectOtpCount()));
                 throw new IdentityException("INCORRECT_OTP", "Attempt Remaining : " + (maxIncorrectOtpCount - otpToken.getIncorrectOtpCount()), HttpStatus.BAD_REQUEST);

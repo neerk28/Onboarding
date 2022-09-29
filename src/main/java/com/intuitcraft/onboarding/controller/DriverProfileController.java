@@ -43,15 +43,15 @@ public class DriverProfileController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}/preferences")
-    public ResponseEntity<Void> saveCommunicationPreference(@PathVariable @NotBlank(message = "Id is required") Long id, @Valid @RequestBody List<DriverPreference> driverPreferences){
-        driverProfileService.saveCommunicationPreferences(id, driverPreferences);
+    @PostMapping("/preferences")
+    public ResponseEntity<Void> saveCommunicationPreference(@Valid @RequestBody DriverPreference driverPreferences){
+        driverProfileService.saveCommunicationPreferences(driverPreferences);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}/preferences")
-    public ResponseEntity<List<DriverPreference>> getCommunicationPreference(@PathVariable @NotBlank(message = "Id is required") Long id){
-        List<DriverPreference> driverPreferences = driverProfileService.getCommunicationPreferencesForId(id);
+    public ResponseEntity<DriverPreference> getCommunicationPreference(@PathVariable @NotBlank(message = "Id is required") Long id){
+        DriverPreference driverPreferences = driverProfileService.getCommunicationPreferencesForId(id);
         return new ResponseEntity<>(driverPreferences, HttpStatus.OK);
     }
 }

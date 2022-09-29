@@ -1,5 +1,6 @@
 package com.intuitcraft.onboarding.controller;
 
+import com.intuitcraft.onboarding.dto.AccessToken;
 import com.intuitcraft.onboarding.entity.DriverEntity;
 import com.intuitcraft.onboarding.dto.SendOtpRequest;
 import com.intuitcraft.onboarding.dto.SendOtpResponse;
@@ -29,13 +30,8 @@ public class OTPController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<DriverEntity> verifyOtp(@Valid @RequestBody ValidateOtpRequest validateOtpRequest){
-        boolean isValid = otpService.verifyOtp(validateOtpRequest);
-        if(isValid)
-            return new ResponseEntity<>(HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<AccessToken> verifyOtp(@Valid @RequestBody ValidateOtpRequest validateOtpRequest){
+        AccessToken accessToken = otpService.verifyOtp(validateOtpRequest);
+        return new ResponseEntity<>(accessToken, HttpStatus.OK);
     }
-
-
 }
