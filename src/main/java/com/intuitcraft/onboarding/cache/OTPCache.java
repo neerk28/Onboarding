@@ -32,7 +32,7 @@ public class OTPCache {
         String cacheKey = getKey(otpToken);
         Object count =  redisTemplate.opsForValue().get(cacheKey);
         if(count != null)
-            return Integer.parseInt((String) count);
+            return (int) count;
         return 0;
     }
 

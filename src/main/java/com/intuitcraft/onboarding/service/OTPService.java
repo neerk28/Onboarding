@@ -38,7 +38,7 @@ public class OTPService {
                 getOtpKey(email, phoneNumber));
 
         if( otpCount < maxIncorrectOtpCount){
-            //sendOTP - another microservice which sends otp to user's email or phoneNumber
+            //sendOTP - identity microservice which sends otp to user's email or phoneNumber
             if(true){
                 OtpToken otpTokenModel = OtpToken.builder()
                         .email(email)
@@ -71,7 +71,7 @@ public class OTPService {
         int otpCount = cache.updateOtpCount(otpCountKey);
         if( otpCount < maxIncorrectOtpCount){
             otpToken.setIncorrectOtpCount(otpCount);
-            //verifyOtp - another microservice which sends otp to user's email or phoneNumber
+            //verifyOtp - identity microservice which sends otp to user's email or phoneNumber
             if(validateOtpRequest.getOtp().equals("123456")){
                 otpToken.setOtp(validateOtpRequest.getOtp());
                 otpToken.setOtpVerified(true);
